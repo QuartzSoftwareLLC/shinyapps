@@ -26,5 +26,3 @@ namePrefix: shiny-
 #       value: /app
 #   target:
 #     kind: Ingress
-
-namespace: shiny
