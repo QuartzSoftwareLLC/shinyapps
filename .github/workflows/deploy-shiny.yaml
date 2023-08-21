@@ -14,9 +14,6 @@ jobs:
     name: Build and Push
     steps:
       - uses: actions/checkout@v2
-      - name: Build
-        run: |
-          Rscript -e 'devtools::build_site()'
       - name: Prepare Docker and Kustomize
         env:
           subpath: ${{ inputs.subpath }}
