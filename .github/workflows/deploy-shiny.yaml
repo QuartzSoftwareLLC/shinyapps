@@ -1,0 +1,63 @@
+# .github/workflows/publish.yml
+name: Build Shiny Image and Push to Docker Repository
+
+on:
+  workflow_call:
+    inputs:
+      subpath:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: self-hosted
+    name: Build and Push
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          Rscript -e 'devtools::build_site()'
+      - name: Prepare Docker and Kustomize
+        env:
+          subpath: ${{ inputs.subpath }}
+        run: |
+          mkdir -p .argo/shiny
+
+          # add kustomization.yaml
+          tee .argo/shiny/kustomization.yaml <<EOF
+          resources:
+          - "https://github.com/quartzsoftwarellc/shinyapps.git/kustomize"
+
+          nameSuffix: ${subpath}-
+
+          commonLabels:
+            app: ${subpath}
+
+          patches:
+          - patch: |-
+          - patch: |-
+              - op: add
+                    path: /spec/rules/0/http/paths/0/path
+                    value: /${subpath}
+                target:
+                  kind: Ingress
+            target:
+              kind: Ingress
+
+          EOF
+
+          # add docker file
+          tee Dockerfile <<EOF
+
+          FROM registry.container-registry:5000/shiny:latest
+
+          COPY . /srv/shiny-server/${subpath}
+
+          EOF
+
+      - uses: quartzsoftwarellc/.github/actions/deploy@main
+        with:
+          image: shiny-${{inputs.subdomain}}
+          kustomize_dir: .argo/shiny
+          branch: argo-shiny
+          github_token: ${{ secrets.GITHUB_TOKEN }}

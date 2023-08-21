@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    # nginx.ingress.kubernetes.io/rewrite-target: /$2
+    cert-manager.io/cluster-issuer: lets-encrypt
+    kubernetes.io/tls-acme: "true"
+spec:
+  tls:
+  - hosts:
+    - shiny.quartzsoftware.com
+    secretName: shiny-ingress-tls
+  rules:
+    - host: shiny.quartzsoftware.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: clusterip
+                port:
+                  number: 80
+            pathType: Prefix
