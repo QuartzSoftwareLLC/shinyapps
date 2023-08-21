@@ -32,7 +32,6 @@ jobs:
 
           patches:
           - patch: |-
-          - patch: |-
               - op: add
                     path: /spec/rules/0/http/paths/0/path
                     value: /${subpath}
