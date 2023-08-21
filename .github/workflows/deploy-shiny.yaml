@@ -25,7 +25,7 @@ jobs:
           resources:
           - "https://github.com/quartzsoftwarellc/shinyapps.git/kustomize"
 
-          nameSuffix: ${subpath}-
+          nameSuffix: -${subpath}
 
           commonLabels:
             app: ${subpath}
