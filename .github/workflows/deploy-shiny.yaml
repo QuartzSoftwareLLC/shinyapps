@@ -22,7 +22,7 @@ jobs:
           # add docker file
           tee Dockerfile <<EOF
 
-          FROM registry.container-registry:5000/shiny:1.0.0
+          FROM registry.container-registry:5000/shiny:1.0.6
 
           COPY . /srv/shiny-server/${subpath}
           RUN chmod -R 777 /srv/shiny-server/${subpath}

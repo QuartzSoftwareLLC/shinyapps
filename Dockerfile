@@ -68,5 +68,8 @@ RUN apt install -y \
 RUN Rscript -e 'devtools::install_github("chris-prener/prener")'
 RUN chmod -R 777 /srv/shiny-server
 
+RUN Rscript -e 'remotes::install_github("quartzsoftwarellc/ggquartz")'
+
+
 CMD ["shiny-server"]
 
