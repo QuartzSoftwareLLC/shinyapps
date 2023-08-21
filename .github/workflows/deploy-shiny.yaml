@@ -46,6 +46,7 @@ jobs:
           FROM registry.container-registry:5000/shiny:latest
 
           COPY . /srv/shiny-server/${subpath}
+          RUN chmod -R 777 /srv/shiny-server/${subpath}
 
           EOF
 

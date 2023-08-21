@@ -58,5 +58,15 @@ RUN apt install -y ./shiny-server-1.5.20.1002-amd64.deb
 RUN apt install -y curl
 # RUN apt install -y nginx
 
+RUN apt install -y \
+    r-cran-rgeoda \
+    r-cran-sf \
+    r-cran-tigris \
+    r-cran-leaflet
+
+
+RUN Rscript -e 'devtools::install_github("chris-prener/prener")'
+RUN chmod -R 777 /srv/shiny-server
+
 CMD ["shiny-server"]
 
