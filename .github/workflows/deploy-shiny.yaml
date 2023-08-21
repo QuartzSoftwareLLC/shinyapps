@@ -54,7 +54,7 @@ jobs:
 
       - uses: quartzsoftwarellc/.github/actions/deploy@main
         with:
-          image: shiny-${{inputs.subdomain}}
+          image: shiny-${{inputs.subpath}}
           kustomize_dir: .argo/shiny
           branch: argo-shiny
           github_token: ${{ secrets.GITHUB_TOKEN }}
