@@ -70,6 +70,8 @@ RUN chmod -R 777 /srv/shiny-server
 
 RUN Rscript -e 'remotes::install_github("quartzsoftwarellc/ggquartz")'
 
+RUN apt-get install -y \
+    r-cran-plotly
 
 CMD ["shiny-server"]
 
