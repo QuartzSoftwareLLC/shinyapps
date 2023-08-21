@@ -22,8 +22,10 @@ jobs:
       - name: Prepare Docker and Kustomize
         env:
           subpath: ${{ inputs.subpath }}
+          env: ${{ inputs.env }}
         run: |
           mkdir -p .argo/shiny
+          [[ $env = prod ]] && subdomain="shiny" || subdomain="shiny-dev"
 
           # add kustomization.yaml
           tee .argo/shiny/kustomization.yaml <<EOF
@@ -40,6 +42,16 @@ jobs:
               - op: add
                 path: /spec/rules/0/http/paths/0/path
                 value: /${subpath}
+              - op: replace
+                path: /spec/rules/0/host
+                value: ${subdomain}.quartzsoftware.com
+              - op: add
+                path: /spec/tls/0
+                value:
+                  hosts:
+                  - ${subdomain}.quartzsoftware.com
+                  secretName: ${subdomain}-ingress-tls
+
             target:
               kind: Ingress
 
@@ -59,5 +71,5 @@ jobs:
         with:
           image: shiny-${{inputs.subpath}}
           kustomize_dir: .argo/shiny
-          branch: argo-shiny-${{inputs.subpath}}
+          branch: argo-shiny-${{inputs.env}}
           github_token: ${{ secrets.GITHUB_TOKEN }}
